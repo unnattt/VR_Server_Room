@@ -2,10 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GameOverTool : MonoBehaviour
+public class GameController : MonoBehaviour
 {
     [SerializeField] private List<PlugController> plugs;
     [SerializeField] private Canvas playAgainCanvas;
+    [SerializeField] private Transform _inServerRoomPos;
+    [SerializeField] private Transform _outServerRoomPos;
+    [SerializeField] private Transform _xrPlayer;
+
+    private void Start()
+    {
+        
+    }
 
     public void CheckAllPulgIsConnected()
     {
@@ -24,6 +32,16 @@ public class GameOverTool : MonoBehaviour
         {
             Invoke(nameof(GameOver), 2f);
         }
+    }
+
+    public void EnterServerRoom()
+    {
+        _xrPlayer.SetPositionAndRotation(_inServerRoomPos.position, _inServerRoomPos.rotation);
+    }
+
+    public void ExitServerRoom()
+    {
+        _xrPlayer.SetPositionAndRotation(_outServerRoomPos.position, _outServerRoomPos.rotation);
     }
 
     private void GameOver()
