@@ -11,7 +11,9 @@ public class PlugController : MonoBehaviour
     public UnityEvent OnWirePluggedOut;
     public Transform plugPosition;
 
-    //public Transform wireHolderPos;
+    public GameObject _realPlug;
+    //public ParticleSystem partical;
+     //public Transform wireHolderPos;
 
     [HideInInspector]
     public Transform endAnchor;
@@ -42,6 +44,12 @@ public class PlugController : MonoBehaviour
 
             OnPlugged();
         }
+
+        //if(other.gameObject.CompareTag("errorPlug"))
+        //{
+        //    _realPlug.SetActive(true);
+        //    gameObject.SetActive(false);
+        //}
     }
 
     private void OnTriggerExit(Collider other)

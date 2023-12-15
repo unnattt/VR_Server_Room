@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Project/Scenes/VR_Server_Room.unity
     guid: 962c2fdf79b314f0fa87c06ca30f7e27
+  - enabled: 0
+    path: Assets/Project/Scenes/TEST.unity
+    guid: d3d891643642f4cffb2920e5df316c72
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: 3d9eba1a28b26d14da4bb6f9dc0d61cf, type: 2}
     com.unity.xr.management.loader_settings: {fileID: 11400000, guid: f6248e851409eca4a8547fff470d652a, type: 2}

@@ -11,11 +11,13 @@ public class CommonMachineCanvasScript : MonoBehaviour
     [SerializeField] private string workingMsg;
     [SerializeField] private TMP_Text _textOfCanvas;
     [SerializeField] private Image imageOfError;
+    [SerializeField] private Image imageOfErrorComp;
 
 
     public void ErrorMethod()
     {
         imageOfError.sprite = images[0];
+        imageOfErrorComp.sprite = images[0];
         _textOfCanvas.text = errorMsg;
         _textOfCanvas.color = new Color(255, 0, 0, 255);
     }
@@ -23,6 +25,7 @@ public class CommonMachineCanvasScript : MonoBehaviour
     public void WorkingMethod()
     {
         imageOfError.sprite = images[1];
+        imageOfErrorComp.sprite = images[1];
         _textOfCanvas.text = workingMsg;
         _textOfCanvas.color = new Color(0,235, 25, 255);
     }

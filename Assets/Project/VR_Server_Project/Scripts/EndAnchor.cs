@@ -8,12 +8,14 @@ public class EndAnchor : MonoBehaviour
 {
     XRGrabInteractable xrGrabInteractable;
     Rigidbody endAnchorRb;
+    //[SerializeField] private Transform plugPos;
 
     private void Start()
     {
+        //transform.position = plugPos.position;
+        //transform.rotation = plugPos.rotation;
         endAnchorRb = GetComponent<Rigidbody>();
         xrGrabInteractable = GetComponent<XRGrabInteractable>();
-
         xrGrabInteractable.selectEntered.AddListener(OnGrabWire);
         xrGrabInteractable.selectExited.AddListener(OnLeavingWire);
     }
