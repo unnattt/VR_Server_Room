@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - errorPlug
+  - CutCable
+  - RealPlug
+  - Plug
   layers:
   - Default
   - TransparentFX
@@ -13,8 +16,8 @@ TagManager:
   - Water
   - UI
   - Player
-  - 
-  - 
+  - Server BOx
+  - RJ_45
   - 
   - 
   - 

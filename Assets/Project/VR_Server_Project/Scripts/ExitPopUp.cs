@@ -4,65 +4,68 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
-public class ExitPopUp : MonoBehaviour
+namespace VR_Server_Room.UI
 {
-    public InputActionReference menuButtonReference;
-    private Canvas canvas;
-    //private TrackedDeviceGraphicRaycaster graphicsRaycaster;
+    public class ExitPopUp : MonoBehaviour
+    {
+        public InputActionReference menuButtonReference;
+        private Canvas canvas;
+        //private TrackedDeviceGraphicRaycaster graphicsRaycaster;
 
-    private void Awake()
-    {
-        //DontDestroyOnLoad(gameObject);
-        canvas = GetComponent<Canvas>();
-        //graphicsRaycaster = GetComponent<TrackedDeviceGraphicRaycaster>();
-    }
-    private void OnEnable()
-    {
-        menuButtonReference.action.performed += OnMenuButtonPressed;
-    }
-    private void OnDisable()
-    {
-        menuButtonReference.action.performed -= OnMenuButtonPressed;
-    }
-    private void Start()
-    {
-        Hide();
-    }
+        private void Awake()
+        {
+            //DontDestroyOnLoad(gameObject);
+            canvas = GetComponent<Canvas>();
+            //graphicsRaycaster = GetComponent<TrackedDeviceGraphicRaycaster>();
+        }
+        private void OnEnable()
+        {
+            menuButtonReference.action.performed += OnMenuButtonPressed;
+        }
+        private void OnDisable()
+        {
+            menuButtonReference.action.performed -= OnMenuButtonPressed;
+        }
+        private void Start()
+        {
+            Hide();
+        }
 
-    private void OnMenuButtonPressed(InputAction.CallbackContext obj)
-    {
-        Debug.Log("OnMenuPressed");
-        if (XRPlayer.instance != null)
+        private void OnMenuButtonPressed(InputAction.CallbackContext obj)
+        {
+            Debug.Log("OnMenuPressed");
+            if (XRPlayer.instance != null)
+            {
+                XRPlayer.instance.SetObjectInPlayerCameraForward(transform);
+                Show();
+            }
+        }
+
+        public void OnGameOver()
         {
             XRPlayer.instance.SetObjectInPlayerCameraForward(transform);
             Show();
         }
-    }
 
-    public void OnGameOver()
-    {
-        XRPlayer.instance.SetObjectInPlayerCameraForward(transform);
-        Show();
-    }
+        public void OnYesClicked()
+        {
+            SceneManager.LoadScene(0);
+        }
+        public void OnNoClicked()
+        {
+            Hide();
+        }
 
-    public void OnYesClicked()
-    {
-        SceneManager.LoadScene(0);
-    }
-    public void OnNoClicked()
-    {
-        Hide();
-    }
+        public void Show()
+        {
+            canvas.enabled = true;
+            //graphicsRaycaster.enabled = true;
+        }
+        public void Hide()
+        {
+            canvas.enabled = false;
+            //graphicsRaycaster.enabled = false;
+        }
 
-    public void Show()
-    {
-        canvas.enabled = true;
-        //graphicsRaycaster.enabled = true;
     }
-    public void Hide()
-    {
-        canvas.enabled = false; 
-        //graphicsRaycaster.enabled = false;
-    }
-
 }

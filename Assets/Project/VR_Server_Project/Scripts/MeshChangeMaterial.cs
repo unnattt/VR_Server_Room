@@ -1,25 +1,42 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.UI;
 
-public class MeshChangeMaterial : MonoBehaviour
+namespace VR_Server_Room.CoreGamePlay
 {
-    [SerializeField] private List<MeshRenderer> totalMesh;
-    [SerializeField] private List<Material> materials;
-  
-    public void ErrorColor()
+    public class MeshChangeMaterial : MonoBehaviour
     {
-        foreach (MeshRenderer meshRenderer in totalMesh)
-        {
-            meshRenderer.material = materials[0];
-        }
-    }
+        [SerializeField] private GameObject buttonNext;
+        [SerializeField] private List<SkinnedMeshRenderer> totalMesh;
+        [SerializeField] private List<Material> materials;
 
-    public void CorrectColor()
-    {
-        foreach (MeshRenderer meshRenderer in totalMesh)
+        public void ErrorColor()
         {
-            meshRenderer.material = materials[1];
+            foreach (SkinnedMeshRenderer meshRenderer in totalMesh)
+            {
+                meshRenderer.material = materials[0];
+            }
+        }
+
+        public void CorrectColor()
+        {
+            foreach (SkinnedMeshRenderer meshRenderer in totalMesh)
+            {
+                meshRenderer.material = materials[1];
+            }
+        }
+
+        private void OnTriggerEnter(Collider other)
+        {
+            if (other.gameObject.GetComponent<XRDirectInteractor>())
+            {
+                Debug.Log("Is GLoves Trigger");
+                CorrectColor();
+                buttonNext.SetActive(true);
+                this.gameObject.SetActive(false);
+            }
         }
     }
 }
