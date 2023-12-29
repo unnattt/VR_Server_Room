@@ -7,8 +7,7 @@ namespace VR_Server_Room.Manager
 {
     public class GameController : MonoBehaviour
     {
-        [SerializeField] private List<PlugController> plugs;
-        //[SerializeField] private Canvas playAgainCanvas;
+        [SerializeField] private List<PlugController> plugs;        
         [SerializeField] private Transform _inServerRoomPos;
         [SerializeField] private Transform _outServerRoomPos;
         [SerializeField] private Transform _xrPlayer;

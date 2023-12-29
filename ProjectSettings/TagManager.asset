@@ -8,6 +8,7 @@ TagManager:
   - CutCable
   - RealPlug
   - Plug
+  - TightenRj_45
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - Player
   - Server BOx
   - RJ_45
-  - 
+  - Crimping_Tool
   - 
   - 
   - 

@@ -7,87 +7,59 @@ namespace VR_Server_Room.CoreGamePlay
 
     public class RealPlug : MonoBehaviour
     {
-        XRGrabInteractable xrGrabInteractable;
-        Vector3 initialPos;
-        Quaternion initialRot;
-        BoxCollider boxCollider;
+        [HideInInspector]
+        public XRGrabInteractable xrGrabInteractable;      
+        public Transform Model;
+        private Vector3 lastGrabbedPosition;
+        private Quaternion lastGrabbedRotation;
 
-        [SerializeField] private bool isScrewResetable;
+        //BoxCollider boxCollider;
 
         private void Awake()
         {
-            initialPos = transform.position;
-            initialRot = transform.rotation;
-            isScrewResetable = false;
-            boxCollider = GetComponent<BoxCollider>();
-            boxCollider.isTrigger = false;
+            lastGrabbedPosition = transform.position;
+            lastGrabbedRotation = transform.rotation;
+            //boxCollider = GetComponent<BoxCollider>();
+            //boxCollider.isTrigger = false;
             xrGrabInteractable = GetComponent<XRGrabInteractable>();
 
         }
 
         private void OnEnable()
         {
-            xrGrabInteractable.selectEntered.AddListener(OnGrabScrewDriver);
-            xrGrabInteractable.selectExited.AddListener(OnLeavingScrewDriver);
+            xrGrabInteractable.selectEntered.AddListener(OnGrabRj_45);
+            xrGrabInteractable.selectExited.AddListener(OnLeavingRj_45);
         }
 
         private void OnDisable()
         {
-            xrGrabInteractable.selectEntered.RemoveListener(OnGrabScrewDriver);
-            xrGrabInteractable.selectExited.RemoveListener(OnLeavingScrewDriver);
+            xrGrabInteractable.selectEntered.RemoveListener(OnGrabRj_45);
+            xrGrabInteractable.selectExited.RemoveListener(OnLeavingRj_45);
         }
 
-        private void Update()
+      
+
+        private void OnLeavingRj_45(SelectExitEventArgs arg0)
         {
-            //if (isScrewResetable) ;
-                //Invoke(nameof(ResetScrewDriver), 0.5f);
+            //boxCollider.isTrigger = false;
+            MoveToInitialLocation();
         }
 
-        private void OnLeavingScrewDriver(SelectExitEventArgs arg0)
+        private void OnGrabRj_45(SelectEnterEventArgs arg0)
         {
-            boxCollider.isTrigger = false;
-            //ResetScrewDriver();
-
-        }
-
-        private void OnGrabScrewDriver(SelectEnterEventArgs arg0)
-        {
-            boxCollider.isTrigger = true;
-        }
-
-        private void OnTriggerEnter(Collider other)
-        {
-            //if (other.gameObject.CompareTag("errorPlug"))
-            //{
-            //    PlugController plug = other.gameObject.GetComponent<PlugController>();
-            //    if (!plug.isConected)
-            //    {
-            //        plug._realPlug.SetActive(true);
-            //        other.gameObject.SetActive(false);
-            //        //plug.partical.Stop();
-            //        isScrewResetable = true;
-            //        SetScrewDriver();
-            //    }
-            //    //ResetScrewDriver();
-            //    //gameObject.SetActive(false);
-            //}            
+            //boxCollider.isTrigger = true;
             
-
-            if (other.gameObject.CompareTag("RealPlug"))
-            {
-                EndAnchor plug = other.gameObject.GetComponent<EndAnchor>();
-                if (plug)
-                {
-                    plug.ChangeModelOnTiggerPlug();
-                }
-            }
         }
 
-        public async void SetScrewDriver()
+        public void MoveToInitialLocation()
         {
-            xrGrabInteractable.enabled = false;
-            await System.Threading.Tasks.Task.Delay(1000);
-            xrGrabInteractable.enabled = true;
+            transform.position = lastGrabbedPosition;
+            transform.rotation = lastGrabbedRotation;
         }
+
+        //public async void SetScrewDriver()
+        //{
+        //    tempTipPlug.SetActive(true);
+        //}
     }
 }
