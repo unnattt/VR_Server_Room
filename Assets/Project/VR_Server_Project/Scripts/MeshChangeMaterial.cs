@@ -6,7 +6,7 @@ namespace VR_Server_Room.CoreGamePlay
 {
     public class MeshChangeMaterial : MonoBehaviour
     {
-        [SerializeField] private GameObject buttonNext;
+        [SerializeField] private VR_Server_Room.UI.ServerRoomPopUp step3,step4;        
         [SerializeField] private List<SkinnedMeshRenderer> totalMesh;
         [SerializeField] private MeshRenderer mesh;
         [SerializeField] private Material[] materials;
@@ -87,7 +87,8 @@ namespace VR_Server_Room.CoreGamePlay
             {
                 Debug.Log("Is GLoves Trigger");
                 CorrectColor();
-                buttonNext.SetActive(true);
+                step3.Hide();
+                step4.Show();
                 this.gameObject.SetActive(false);
             }
         }

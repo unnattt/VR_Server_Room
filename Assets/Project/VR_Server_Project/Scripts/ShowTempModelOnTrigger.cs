@@ -1,15 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
 using VR_Server_Room.CoreGamePlay;
 
 public class ShowTempModelOnTrigger : MonoBehaviour
 {
+    [Header("Temp Fake Tools")]
     [SerializeField] private GameObject TempCrimping;
     [SerializeField] private GameObject TempPlug;
+
+    [Header("Real Tools And Rj_45")]
     [SerializeField] private CrimpingTool crimpingTool;
     [SerializeField] private RealPlug rj_45_Model;
+    [SerializeField] private EndAnchor endAnchor;
 
+    [Header("Pos And Rotations")]
     [SerializeField] private Transform rjPlugInWire;
     [SerializeField] private Quaternion initialRotationOfCrimpingTool;
     [SerializeField] private Quaternion initialRotationOfRj_45;
@@ -25,7 +31,32 @@ public class ShowTempModelOnTrigger : MonoBehaviour
         {
             initialRotationOfRj_45 = rj_45_Model.Model.localRotation;
         }
+    }
 
+    private void OnDisable()
+    {
+        if (TempCrimping != null)
+        {
+            TempCrimping.SetActive(false);
+            SetRotationAndPositionStop(true, endAnchor.xrGrabInteractable);
+            SetRotationAndPositionStop(true, crimpingTool.xrGrabInteractable);
+            crimpingTool.Model.localRotation = initialRotationOfCrimpingTool;
+            crimpingTool.Model.localPosition = Vector3.zero;
+        }
+
+        if (TempPlug != null)
+        {
+            TempPlug.SetActive(false);
+            SetRotationAndPositionStop(true, endAnchor.xrGrabInteractable);
+            SetRotationAndPositionStop(true, rj_45_Model.xrGrabInteractable);
+            rj_45_Model.Model.localRotation = initialRotationOfRj_45;
+            rj_45_Model.Model.localPosition = Vector3.zero;
+        }
+    }
+
+    private void Update()
+    {
+        transform.position = rjPlugInWire.position;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -33,86 +64,27 @@ public class ShowTempModelOnTrigger : MonoBehaviour
         if (other.gameObject.GetComponent<CrimpingTool>())
         {
             if (TempCrimping == null) return;
-            //TipScrimpingTool();
+            
             TempCrimping.SetActive(true);
-            crimpingTool.xrGrabInteractable.trackRotation = false;
-            crimpingTool.xrGrabInteractable.trackPosition = false;
-            crimpingTool.Model.transform.position = TempCrimping.transform.position;
-            crimpingTool.Model.transform.rotation = TempCrimping.transform.rotation;
+            SetRotationAndPositionStop(false, endAnchor.xrGrabInteractable);
+            SetRotationAndPositionStop(false, crimpingTool.xrGrabInteractable);
+            crimpingTool.Model.transform.SetPositionAndRotation(TempCrimping.transform.position, TempCrimping.transform.rotation);
         }
         
         if (other.gameObject.GetComponent<RealPlug>())
         {
             if (TempPlug == null) return;
-            //TipPlug();
+          
             TempPlug.SetActive(true);
-            rj_45_Model.xrGrabInteractable.trackRotation = false;
-            rj_45_Model.xrGrabInteractable.trackPosition = false;
-            rj_45_Model.Model.transform.position = TempPlug.transform.position;
-            rj_45_Model.Model.transform.rotation = TempPlug.transform.rotation;
+            SetRotationAndPositionStop(false, endAnchor.xrGrabInteractable);
+            SetRotationAndPositionStop(false, rj_45_Model.xrGrabInteractable);          
+            rj_45_Model.Model.transform.SetPositionAndRotation(TempPlug.transform.position, TempPlug.transform.rotation);
         }
-
     }
 
-
-    private void Update()
+    private void SetRotationAndPositionStop(bool temp, XRGrabInteractable xRGrab)
     {
-        transform.position = rjPlugInWire.position;
-    }
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    if (other.gameObject.CompareTag("CutCable"))
-    //    {
-    //        if (TempCrimping == null) return;
-    //        //TipScrimpingTool();
-    //        TempCrimping.SetActive(false);
-    //        crimpingTool.xrGrabInteractable.trackRotation = true;
-    //        crimpingTool.Model.localRotation = initialRotationOfCrimpingTool;
-    //        crimpingTool.Model.localPosition = Vector3.zero;
-    //    }
-
-    //    if (other.gameObject.CompareTag("RealPlug"))
-    //    {
-    //        if (TempPlug == null) return;
-
-    //        TempPlug.SetActive(false);
-    //        rj_45_Model.xrGrabInteractable.trackRotation = true;
-    //        rj_45_Model.Model.localRotation = initialRotationOfRj_45;
-    //        rj_45_Model.Model.localPosition = Vector3.zero;
-    //    }
-
-    //    if (other.gameObject.CompareTag("TightenRj_45"))
-    //    {
-    //        if (TempCrimping == null) return;
-
-    //        TempCrimping.SetActive(false);
-    //        crimpingTool.xrGrabInteractable.trackRotation = true;
-    //        crimpingTool.Model.localRotation = initialRotationOfCrimpingTool;
-    //        crimpingTool.Model.localPosition = Vector3.zero;
-    //    }
-    //}
-
-    private void OnDisable()
-    {
-        if (TempCrimping != null)
-        {
-            TempCrimping.SetActive(false);
-            crimpingTool.xrGrabInteractable.trackRotation = true;
-            crimpingTool.xrGrabInteractable.trackPosition = true;
-            //crimpingTool.transform.position = crimpingTool.Model.transform.localPosition;
-            crimpingTool.Model.localRotation = initialRotationOfCrimpingTool;
-            crimpingTool.Model.localPosition = Vector3.zero;
-
-        }
-
-        if (TempPlug != null)
-        {
-            TempPlug.SetActive(false);
-            rj_45_Model.xrGrabInteractable.trackRotation = true;
-            rj_45_Model.xrGrabInteractable.trackPosition = true;
-            //rj_45_Model.transform.position = rj_45_Model.Model.transform.localPosition;
-            rj_45_Model.Model.localRotation = initialRotationOfRj_45;
-            rj_45_Model.Model.localPosition = Vector3.zero;
-        }
-    }
+        xRGrab.trackRotation = temp;
+        xRGrab.trackPosition = temp;
+    }        
 }

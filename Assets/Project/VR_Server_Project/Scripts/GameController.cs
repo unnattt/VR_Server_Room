@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,48 +8,86 @@ namespace VR_Server_Room.Manager
 {
     public class GameController : MonoBehaviour
     {
-        [SerializeField] private List<PlugController> plugs;        
-        [SerializeField] private Transform _inServerRoomPos;
-        [SerializeField] private Transform _outServerRoomPos;
-        [SerializeField] private Transform _xrPlayer;
+        public static GameController instance;
+        [Header("All Steps")]
+        [SerializeField] private ServerRoomPopUp step5, step6, step7, step8, step9, step10;
 
-        private void Start()
+        [Header("All Reference Of Equipments")]
+        [SerializeField] private GameObject crimpingTool, real_Rj_45, spwan_Rj_45, CutCable, defaultWire, wireHiderRj_45, _mainEndAnchor;
+
+        [Header("All trigger Area")]
+        [SerializeField] private GameObject FirstTip, SecondTip, ThirdTip;
+        [SerializeField] private ImageFillTimer timer;
+
+        [Header("scale change Area")]
+        [SerializeField] private Vector3 defaultScale;
+        [SerializeField] private Vector3 finalScale;
+        private bool isDoorOpenFirstTime;
+        
+        private void Awake()
         {
-
+            instance = this;
+            isDoorOpenFirstTime = true;
         }
 
-        public void CheckAllPulgIsConnected()
+        public void OnDoorExit()
         {
-            bool allConnected = true;
-
-            foreach (PlugController plug in plugs)
+            if (isDoorOpenFirstTime)
             {
-                if (!plug.isConected)
-                {
-                    allConnected = false;
-                    break; // No need to continue checking if one plug is not connected
-                }
-            }
-
-            if (allConnected)
-            {
-                //Invoke(nameof(GameOver), 2f);
+                step5.Hide();
+                step6.Show();
+                crimpingTool.SetActive(true);
+                isDoorOpenFirstTime = false;
             }
         }
 
-        public void EnterServerRoom()
+        public void OnPlugConnected()
         {
-            _xrPlayer.SetPositionAndRotation(_inServerRoomPos.position, _inServerRoomPos.rotation);
+            step9.Hide();
+            step10.Show();
         }
 
-        public void ExitServerRoom()
+        public void CrimpingToolTriggerFirstTime()
         {
-            _xrPlayer.SetPositionAndRotation(_outServerRoomPos.position, _outServerRoomPos.rotation);
+            defaultWire.SetActive(false);
+            CutCable.SetActive(true);
+            FirstTip.SetActive(false);
+            SecondTip.SetActive(true);            
+            step6.Hide();
+            step7.Show();
+            real_Rj_45.SetActive(true);
         }
 
-        private void GameOver()
+        public void RJ_45Trigger()
         {
-            //playAgainCanvas.GetComponent<ExitPopUp>().OnGameOver();
+            CutCable.SetActive(false);
+            spwan_Rj_45.SetActive(true);
+            SecondTip.SetActive(false);
+            ThirdTip.SetActive(true);
+            _mainEndAnchor.tag = "TightenRj_45";
+            step7.Hide();
+            step8.Show();
+            crimpingTool.SetActive(true);
+        }
+
+        public void CrimpingToolTriggerSecondTime()
+        {
+            ThirdTip.SetActive(false);
+            _mainEndAnchor.tag = "Plug";
+            wireHiderRj_45.transform.localScale = finalScale;
+            step8.Hide();
+            step9.Show();            
+        }
+
+
+        public async void HandleTriggerTimer(GameObject obj, Action triggerAction)
+        {
+            timer._timerCanvas.enabled = true;
+            timer.StartFillImage();
+            await System.Threading.Tasks.Task.Delay(2000);
+            timer._timerCanvas.enabled = false;
+            triggerAction();
+            obj.SetActive(false);            
         }
     }
 }

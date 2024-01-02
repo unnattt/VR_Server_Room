@@ -8,13 +8,10 @@ namespace VR_Server_Room.UI
     public class ServerRoomPopUp : MonoBehaviour
     {
         private Canvas canvas;
-        //private TrackedDeviceGraphicRaycaster graphicsRaycaster;
-
+       
         private void Awake()
-        {
-            //DontDestroyOnLoad(gameObject);
-            canvas = GetComponent<Canvas>();
-            //graphicsRaycaster = GetComponent<TrackedDeviceGraphicRaycaster>();
+        {            
+            canvas = GetComponent<Canvas>();            
         }
 
         private void Start()
@@ -29,13 +26,12 @@ namespace VR_Server_Room.UI
 
         public void Show()
         {
-            canvas.enabled = true;
-            //graphicsRaycaster.enabled = true;
+            canvas.enabled = true;         
         }
+
         public void Hide()
         {
-            canvas.enabled = false;
-            //graphicsRaycaster.enabled = false;
+            canvas.enabled = false;        
         }
 
 

@@ -3,24 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.Interaction.Toolkit;
+using VR_Server_Room.Manager;
 using VR_Server_Room.UI;
 
 namespace VR_Server_Room.CoreGamePlay
 {
     public class EndAnchor : MonoBehaviour
     {
-        XRGrabInteractable xrGrabInteractable;
+        [HideInInspector]
+        public XRGrabInteractable xrGrabInteractable;
         Rigidbody endAnchorRb;
 
-        [SerializeField] private List<GameObject> buttons;
-
-        [SerializeField] private GameObject realPlug, CutCable, FirstPlug;
-        [SerializeField] private GameObject FirstTip, SecondTip, ThirdTip, tempTipPlug, tempTipWire;              
-        [SerializeField] private ImageFillTimer timer;
+        [Header("release Obj At Certain Distance")]
         [SerializeField] private float releaseDistance;
         [SerializeField] private bool isSelected;
+        [SerializeField] private GameObject tempTipPlug, tempTipWire;
         private Vector3 initialPos;
-
 
         private void Awake()
         {
@@ -98,7 +96,7 @@ namespace VR_Server_Room.CoreGamePlay
             if (realPlug != null)
             {
                 Debug.Log("Rj_45_Plug Trigger");
-                HandleTriggerTimer(realPlug.gameObject , RJ_45Trigger);
+                GameController.instance.HandleTriggerTimer(realPlug.gameObject, GameController.instance.RJ_45Trigger);
             }
 
 
@@ -106,83 +104,86 @@ namespace VR_Server_Room.CoreGamePlay
             if (crimpingTool != null)
             {
                 //Debug.Log("Stay Crimpimng Tool");
-              
+
                 if (crimpingTool.isUsedFirstTime)
                 {
                     Debug.Log("Crimpimng Tool First Time");
-                    HandleTriggerTimer(crimpingTool.gameObject, CrimpingToolTriggerFirstTime);                    
+                    GameController.instance.HandleTriggerTimer(crimpingTool.gameObject, GameController.instance.CrimpingToolTriggerFirstTime);
                     //crimpingTool.isUsedFirstTime = false;
                 }
                 else
                 {
                     Debug.Log("Crimpimng Tool Second Time");
-                    HandleTriggerTimer(crimpingTool.gameObject, CrimpingToolTriggerSecondTime);
+                    GameController.instance.HandleTriggerTimer(crimpingTool.gameObject, GameController.instance.CrimpingToolTriggerSecondTime);
                 }
 
             }
         }
 
+        //    public void OnDoorExit()
+        //    {            
+        //        if (isDoorOpenFirstTime)
+        //        {
+        //            step5.Hide();
+        //            step6.Show();
+        //            crimpingTool.SetActive(true);
+        //            isDoorOpenFirstTime = false;
+        //        }
+        //    }
 
-        //private void OnTriggerExit(Collider other)
-        //{
-        //    if (other.gameObject.CompareTag("RealPlug"))
+        //    public void OnPlugConnected()
         //    {
-        //        //HandleTriggerTimerExit();
-        //        //StopTriggerTimerCoroutine(coroutineTwo);
-        //        Debug.Log("Stopped In Exit");
+        //        step9.Hide();
+        //        step10.Show();          
         //    }
 
-        //    if (other.gameObject.CompareTag("TightenRj_45"))
+        //    public void CrimpingToolTriggerFirstTime()
         //    {
-        //        HandleTriggerTimerExit();
-        //        StopTriggerTimerCoroutine(coroutineThree);
+        //        defaultWire.SetActive(false);
+        //        CutCable.SetActive(true);
+        //        FirstTip.SetActive(false);
+        //        SecondTip.SetActive(true);
+        //        //buttons[0].SetActive(true);
+        //        step6.Hide();
+        //        step7.Show();
+        //        real_Rj_45.SetActive(true);
         //    }
 
-        //    if (other.gameObject.CompareTag("CutCable"))
-        //    {                
-        //        HandleTriggerTimerExit();
-        //        //StopTriggerTimerCoroutine(coroutineOne);
-        //        Debug.Log("Stopped In Exit");
-        //        //HandleTriggerTimerExit(CrimpingToolTriggerExitFirstTime);
+        //    public void RJ_45Trigger()
+        //    {
+        //        CutCable.SetActive(false);
+        //        spwan_Rj_45.SetActive(true);
+        //        SecondTip.SetActive(false);
+        //        ThirdTip.SetActive(true);
+        //        //buttons[1].SetActive(true);
+        //        this.tag = "TightenRj_45";
+        //        step7.Hide();
+        //        step8.Show();
+        //        crimpingTool.SetActive(true);
         //    }
+
+        //    public void CrimpingToolTriggerSecondTime()
+        //    {
+        //        ThirdTip.SetActive(false);
+        //        //buttons[2].SetActive(true);
+        //        this.tag = "Plug";
+        //        wireHiderRj_45.transform.localScale = finalScale;
+        //        step8.Hide();
+        //        step9.Show();
+        //        //crimpingTool.SetActive(true);
+        //    }
+
+
+        //    private async void HandleTriggerTimer(GameObject obj, Action triggerAction)
+        //    {
+        //        timer._timerCanvas.enabled = true;
+        //        timer.StartFillImage();
+        //        await System.Threading.Tasks.Task.Delay(2000);
+        //        timer._timerCanvas.enabled = false;
+        //        triggerAction();
+        //        obj.SetActive(false);
+        //        //obj.GetComponent<CrimpingTool>().isUsedFirstTime = false;
+        //    }      
         //}
-
-        public void CrimpingToolTriggerFirstTime()
-        {
-            FirstPlug.SetActive(false);
-            CutCable.SetActive(true);
-            FirstTip.SetActive(false);
-            SecondTip.SetActive(true);
-            buttons[0].SetActive(true);
-        }
-
-        public void RJ_45Trigger()
-        {
-            CutCable.SetActive(false);
-            realPlug.SetActive(true);
-            SecondTip.SetActive(false);
-            ThirdTip.SetActive(true);
-            buttons[1].SetActive(true);
-            this.tag = "TightenRj_45";
-        }
-
-        public void CrimpingToolTriggerSecondTime()
-        {
-            ThirdTip.SetActive(false);
-            buttons[2].SetActive(true);
-            this.tag = "Plug";
-        }
-
-
-        private async void HandleTriggerTimer(GameObject obj, Action triggerAction)
-        {
-            timer._timerCanvas.enabled = true;
-            timer.StartFillImage();
-            await System.Threading.Tasks.Task.Delay(2000);
-            timer._timerCanvas.enabled = false;
-            triggerAction();
-            obj.SetActive(false);
-            //obj.GetComponent<CrimpingTool>().isUsedFirstTime = false;
-        }      
     }
 }

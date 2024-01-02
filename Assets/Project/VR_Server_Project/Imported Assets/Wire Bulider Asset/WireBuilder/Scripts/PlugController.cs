@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
+using VR_Server_Room.CoreGamePlay;
 
 public class PlugController : MonoBehaviour
 {
@@ -40,7 +40,7 @@ public class PlugController : MonoBehaviour
             endAnchorRB.isKinematic = true;
             endAnchor.transform.position = plugPosition.position;
             endAnchor.transform.rotation = transform.rotation;
-
+            other.gameObject.GetComponent<EndAnchor>().xrGrabInteractable.enabled = false;
 
             OnPlugged();
         }
@@ -52,18 +52,18 @@ public class PlugController : MonoBehaviour
         //}
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        //Debug.Log(other.name);
-        if (other.gameObject.CompareTag("Plug"))
-        {
-            isConected = false;
-            //endAnchorRB.isKinematic = false;
+    //private void OnTriggerExit(Collider other)
+    //{
+    //    //Debug.Log(other.name);
+    //    if (other.gameObject.CompareTag("Plug"))
+    //    {
+    //        isConected = false;
+    //        //endAnchorRB.isKinematic = false;
 
-            //OnPlugged();
-            OnPluggedOut();
-        }
-    }
+    //        //OnPlugged();
+    //        OnPluggedOut();
+    //    }
+    //}
 
     private void Update()
     {

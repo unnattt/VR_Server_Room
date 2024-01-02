@@ -10,13 +10,7 @@ namespace VR_Server_Room.UI
         public Canvas _timerCanvas;
         public Image fillImage;
         public float fillDuration;
-
-        private void Start()
-        {
-            // Start the filling process when the script starts (you can trigger it based on your requirements)
-            //StartFillImage();
-        }
-
+        
         public void StartFillImage()
         {
             StartCoroutine(FillImageCoroutine());
@@ -42,11 +36,5 @@ namespace VR_Server_Room.UI
             yield return new WaitForSeconds(1);
             fillImage.fillAmount = 0f;
         }
-
-        //public void ResetFillAmount()
-        //{
-        //    StopAllCoroutines();
-        //    fillImage.fillAmount = 0f;
-        //}
     }
 }

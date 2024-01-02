@@ -11,16 +11,12 @@ namespace VR_Server_Room.CoreGamePlay
         public XRGrabInteractable xrGrabInteractable;      
         public Transform Model;
         private Vector3 lastGrabbedPosition;
-        private Quaternion lastGrabbedRotation;
-
-        //BoxCollider boxCollider;
+        private Quaternion lastGrabbedRotation;        
 
         private void Awake()
         {
             lastGrabbedPosition = transform.position;
-            lastGrabbedRotation = transform.rotation;
-            //boxCollider = GetComponent<BoxCollider>();
-            //boxCollider.isTrigger = false;
+            lastGrabbedRotation = transform.rotation;          
             xrGrabInteractable = GetComponent<XRGrabInteractable>();
 
         }
@@ -36,18 +32,14 @@ namespace VR_Server_Room.CoreGamePlay
             xrGrabInteractable.selectEntered.RemoveListener(OnGrabRj_45);
             xrGrabInteractable.selectExited.RemoveListener(OnLeavingRj_45);
         }
-
       
-
         private void OnLeavingRj_45(SelectExitEventArgs arg0)
         {
-            //boxCollider.isTrigger = false;
-            MoveToInitialLocation();
+            
         }
 
         private void OnGrabRj_45(SelectEnterEventArgs arg0)
-        {
-            //boxCollider.isTrigger = true;
+        {            
             
         }
 
@@ -55,11 +47,6 @@ namespace VR_Server_Room.CoreGamePlay
         {
             transform.position = lastGrabbedPosition;
             transform.rotation = lastGrabbedRotation;
-        }
-
-        //public async void SetScrewDriver()
-        //{
-        //    tempTipPlug.SetActive(true);
-        //}
+        }       
     }
 }
