@@ -13,8 +13,11 @@ namespace VR_Server_Room.CoreGamePlay
         private Vector3 lastGrabbedPosition;
         private Quaternion lastGrabbedRotation;        
 
+        [HideInInspector]
+        public bool isPlugTriggered;   
         private void Awake()
         {
+            isPlugTriggered = false;  
             lastGrabbedPosition = transform.position;
             lastGrabbedRotation = transform.rotation;          
             xrGrabInteractable = GetComponent<XRGrabInteractable>();
@@ -31,11 +34,14 @@ namespace VR_Server_Room.CoreGamePlay
         {
             xrGrabInteractable.selectEntered.RemoveListener(OnGrabRj_45);
             xrGrabInteractable.selectExited.RemoveListener(OnLeavingRj_45);
+            isPlugTriggered = false;
+            MoveToInitialLocation();
         }
       
         private void OnLeavingRj_45(SelectExitEventArgs arg0)
         {
-            
+            if(isPlugTriggered) return;
+            MoveToInitialLocation();
         }
 
         private void OnGrabRj_45(SelectEnterEventArgs arg0)
